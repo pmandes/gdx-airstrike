@@ -1,0 +1,6 @@
+d:
+d:data
+i:data/libgdx.png
+d:images
+i:images/bckgrnd.png
+i:images/f35.png
