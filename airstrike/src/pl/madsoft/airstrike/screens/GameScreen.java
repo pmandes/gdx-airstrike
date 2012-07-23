@@ -1,22 +1,26 @@
 package pl.madsoft.airstrike.screens;
 
+import pl.madsoft.airstrike.AirStrikeGame;
 import pl.madsoft.airstrike.model.World;
 import pl.madsoft.airstrike.view.WorldRenderer;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL10;
 
-public class GameScreen implements Screen {
+public class GameScreen extends AbstractScreen {
+
+	public GameScreen(Game game) {
+		super(game);
+		
+		Gdx.app.log(AirStrikeGame.LOG, "GameScreen");		
+	}
 
 	private WorldRenderer renderer;
 	private World world;
 
-
 	@Override
 	public void render(float delta) {
-	    Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
-	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		super.render(delta);
 	    renderer.render();
 	}
 
@@ -28,31 +32,30 @@ public class GameScreen implements Screen {
 	@Override
 	public void show() {
 		world = new World();
-        renderer = new WorldRenderer(world, true);
+        renderer = new WorldRenderer(world, spriteBatch, true);
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}	
 }

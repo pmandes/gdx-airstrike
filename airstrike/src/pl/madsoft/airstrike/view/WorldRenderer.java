@@ -1,7 +1,12 @@
 package pl.madsoft.airstrike.view;
 
+import pl.madsoft.airstrike.model.Player;
+import pl.madsoft.airstrike.model.Tile;
+import pl.madsoft.airstrike.model.World;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -10,18 +15,13 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.graphics.FPSLogger;
-
-import pl.madsoft.airstrike.model.Player;
-import pl.madsoft.airstrike.model.Tile;
-import pl.madsoft.airstrike.model.World;
 
 public class WorldRenderer {
 
 	private static final float CAMERA_WIDTH = 6.5f;
 	private static final float CAMERA_HEIGHT = 10.67f;
 
-	//private static final float CAMERA_WIDTH = 7f;
+	//private static final float CAMERA_WIDTH = 26f;
 	//private static final float CAMERA_HEIGHT = 46f;
 
 	private Stage stage;
@@ -55,9 +55,10 @@ public class WorldRenderer {
 		return this.stage;
 	}
 
-	public WorldRenderer(World world, boolean debug) {
+	public WorldRenderer(World world, SpriteBatch spriteBatch, boolean debug) {
 
 		this.world = world;
+		this.spriteBatch = spriteBatch;
 		this.debug = debug;
 		
 		fpsLogger = new FPSLogger();
@@ -66,7 +67,6 @@ public class WorldRenderer {
 		this.cam.position.set(CAMERA_WIDTH / 2f, CAMERA_HEIGHT / 2f, 0);
 		this.cam.update();
 
-		spriteBatch = new SpriteBatch();
 		loadTextures();
 	}
 
@@ -80,6 +80,9 @@ public class WorldRenderer {
 	}
 
 	public void render() {
+		
+		//Gdx.app.log(AirStrikeGame.LOG, "w render");
+		
 		spriteBatch.begin();
 			drawTilemap();
 			drawPlayer();
