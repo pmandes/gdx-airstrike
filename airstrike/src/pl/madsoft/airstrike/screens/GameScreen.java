@@ -12,7 +12,7 @@ public class GameScreen extends AbstractScreen {
 	public GameScreen(Game game) {
 		super(game);
 		
-		Gdx.app.log(AirStrikeGame.LOG, "GameScreen");		
+		Gdx.app.log(AirStrikeGame.LOG, "GameScreen");
 	}
 
 	private WorldRenderer renderer;
@@ -32,7 +32,7 @@ public class GameScreen extends AbstractScreen {
 	@Override
 	public void show() {
 		world = new World();
-        renderer = new WorldRenderer(world, spriteBatch, true);
+        renderer = new WorldRenderer(world, spriteBatch, stage, true);
 	}
 
 }

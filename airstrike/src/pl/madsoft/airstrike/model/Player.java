@@ -11,9 +11,11 @@ public class Player {
 
 	public static final float HEIGHT = 1.33f;
 	public static final float WIDTH = 0.907f;
+	
+	public static final float START_V_SPEED = 0.02f; 
 
 	Vector2   position = new Vector2();
-    Vector2   velocity = new Vector2();
+    Vector2   velocity = new Vector2(0, START_V_SPEED);
     Rectangle bounds = new Rectangle();
 	State     state = State.INFLIGTH;
 
@@ -21,6 +23,11 @@ public class Player {
 		return position;
 	}
 
+	public void setPosition(float x, float y) {
+		this.position.x = x;
+		this.position.y = y;		
+	}    
+    
 	public Rectangle getBounds() {
 		return bounds;
 	}
@@ -31,5 +38,11 @@ public class Player {
 		this.bounds.height = HEIGHT;
         this.bounds.width = WIDTH;
 	}
+	
+	public void update() {
+		
+		position = position.add(velocity);
+	}
+
 
 }
