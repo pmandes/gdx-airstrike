@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.FPSLogger;
 
 public class AirStrikeGame extends Game {
 
-	public static final String LOG = AirStrikeGame.class.getSimpleName();
+	public static final String LOG = new String("AirStrikeGame"); //AirStrikeGame.class.getSimpleName();
 	public static final boolean DEBUG_MODE = true;
 
 	private FPSLogger fpsLogger;
@@ -29,8 +29,13 @@ public class AirStrikeGame extends Game {
 	public void setScreen(Screen screen) {
 		super.setScreen(screen);
 		
-        Gdx.app.log(AirStrikeGame.LOG, "Setting screen: " + screen.getClass().getSimpleName() );
+        //Gdx.app.log(AirStrikeGame.LOG, "Setting screen: " + screen.getClass().getSimpleName() );
 		
+	}
+	
+	public void render() {
+		super.render();
+		fpsLogger.log(); 
 	}
 	
 	// screens

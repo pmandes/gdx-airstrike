@@ -15,8 +15,9 @@ public class Player {
 	public static final float HEIGHT = 1.33f;
 	public static final float WIDTH = 0.907f;
 	
-	public static final float START_V_SPEED = 0.02f; 
-
+	//public static final float START_V_SPEED = 0.01334f; 
+	public static final float START_V_SPEED = 0.04f;
+	
 	Vector2   position = new Vector2();
     Vector2   velocity = new Vector2(0, START_V_SPEED);
     Rectangle bounds = new Rectangle();
@@ -44,7 +45,7 @@ public class Player {
 	
 	public void updatePosition() {
 		
-		Gdx.app.log(AirStrikeGame.LOG, "player position: " + getPosition().toString());
+		//Gdx.app.log(AirStrikeGame.LOG, "player position: " + getPosition().toString());
 		
 		position = position.add(velocity);
 	}

@@ -1,16 +1,20 @@
 package pl.madsoft.airstrike.screens;
 
+import pl.madsoft.airstrike.AirStrikeGame;
+import pl.madsoft.airstrike.model.Player;
+import pl.madsoft.airstrike.view.PlayerJet2D;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.tiled.SimpleTileAtlas;
+import com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer;
+import com.badlogic.gdx.graphics.g2d.tiled.TiledLoader;
+import com.badlogic.gdx.graphics.g2d.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
-
-import pl.madsoft.airstrike.AirStrikeGame;
-import pl.madsoft.airstrike.model.Player;
-import pl.madsoft.airstrike.model.World;
-import pl.madsoft.airstrike.view.PlayerJet2D;
-import pl.madsoft.airstrike.view.WorldRenderer;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 
 public class GameScreen extends AbstractScreen {
@@ -18,9 +22,10 @@ public class GameScreen extends AbstractScreen {
 	private PlayerJet2D playerJet;
 	private Player player;
 	private Texture playerTexture;
+	private TileMapRenderer tileMapRenderer;
 	
-	//private WorldRenderer worldRenderer;
-	//private World world;
+	private Texture cloudsTexture;
+ 	private Image cloudsImage;
 	
 	public GameScreen(Game game) {
 		super(game);
@@ -31,20 +36,21 @@ public class GameScreen extends AbstractScreen {
 	@Override
 	public void render(float delta) {
 		
+//		/Gdx.app.log(AirStrikeGame.LOG, "delta >" + delta);
+		
 		stage.act(delta);
 		
 		Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
+		stage.getCamera().translate(0, 2f, 0);
+		cloudsImage.translate(0, -2f);
+
+		tileMapRenderer.render((OrthographicCamera) stage.getCamera());
+		
 		stage.draw();
-	
-		//worldRenderer.render();
 	}
 
-	@Override
-	public void resize(int width, int height) {
-		//worldRenderer.setSize(width, height);
-	}
 
 	@Override
 	public void show() {
@@ -53,10 +59,17 @@ public class GameScreen extends AbstractScreen {
 		playerTexture = new Texture(Gdx.files.internal("images/f35.png"));		
 		playerJet = PlayerJet2D.create(player, playerTexture);
 
-		//world = new World();
-		//world.setPlayer(player);
-        //worldRenderer = new WorldRenderer(world, spriteBatch, true);
+		TiledMap tiledMap = TiledLoader.createMap(Gdx.files.internal("data/sample-level.tmx"));
+		SimpleTileAtlas tileAtlas = new SimpleTileAtlas(tiledMap, Gdx.files.internal("data"));
+		tileMapRenderer = new TileMapRenderer(tiledMap, tileAtlas, 7, 45);
 		
+		cloudsTexture = new Texture(Gdx.files.internal("images/clouds.png"));
+		cloudsImage = new Image(cloudsTexture);
+		
+		
+		Gdx.app.log(AirStrikeGame.LOG, "tiled map > " + tiledMap.width + "x" + tiledMap.height + " -> " + tiledMap.tileWidth + "x" + tiledMap.tileHeight);	
+
+		stage.addActor(cloudsImage);
 		stage.addActor(playerJet);
 	}
 

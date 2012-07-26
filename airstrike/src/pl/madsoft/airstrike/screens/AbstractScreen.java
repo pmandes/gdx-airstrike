@@ -21,7 +21,7 @@ public abstract class AbstractScreen implements Screen {
 
 	public AbstractScreen(Game game) {
 		
-		Gdx.app.log(AirStrikeGame.LOG, "Construct " + getName());
+		Gdx.app.log(AirStrikeGame.LOG, "Construct ");
 		
 		this.game = game;
 
@@ -33,7 +33,7 @@ public abstract class AbstractScreen implements Screen {
 	}
 
     protected String getName() {
-        return getClass().getSimpleName();
+        return this.getClass().getSimpleName();
     }	
 	
 	@Override
