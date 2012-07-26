@@ -11,6 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public abstract class AbstractScreen implements Screen {
 
+	public static final int GAME_VIEWPORT_WIDTH = 480, GAME_VIEWPORT_HEIGHT = 800;	
+	public static final float CAMERA_WIDTH = 6.5f, CAMERA_HEIGHT = 10.67f;	
+	//public static final float CAMERA_WIDTH = 26f, CAMERA_HEIGHT = 46f;	
+	
 	protected final SpriteBatch spriteBatch;
 	protected final Game game;
 	protected final Stage stage;
@@ -20,8 +24,12 @@ public abstract class AbstractScreen implements Screen {
 		Gdx.app.log(AirStrikeGame.LOG, "Construct " + getName());
 		
 		this.game = game;
+
+	    int width = GAME_VIEWPORT_WIDTH;
+        int height = GAME_VIEWPORT_HEIGHT;
+
 		spriteBatch = new SpriteBatch();
-		stage = new Stage(0, 0, true);
+		stage = new Stage(width, height, true);
 	}
 
     protected String getName() {
@@ -30,7 +38,9 @@ public abstract class AbstractScreen implements Screen {
 	
 	@Override
 	public void show() {
-		Gdx.app.log(AirStrikeGame.LOG, "Showing screen: " + getName()); 
+		Gdx.app.log(AirStrikeGame.LOG, "Showing screen: " + getName());
+		
+		Gdx.input.setInputProcessor(stage);
 	}
 
 	@Override

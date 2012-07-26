@@ -1,5 +1,8 @@
 package pl.madsoft.airstrike.model;
 
+import pl.madsoft.airstrike.AirStrikeGame;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -23,9 +26,8 @@ public class Player {
 		return position;
 	}
 
-	public void setPosition(float x, float y) {
-		this.position.x = x;
-		this.position.y = y;		
+	public void setVelocity(Vector2 velocity) {
+		this.velocity = velocity;
 	}    
     
 	public Rectangle getBounds() {
@@ -33,13 +35,16 @@ public class Player {
 	}
 	
 	public Player(Vector2 position) {
-	
-		this.position = position;
+
 		this.bounds.height = HEIGHT;
         this.bounds.width = WIDTH;
+
+		this.position = position;
 	}
 	
-	public void update() {
+	public void updatePosition() {
+		
+		Gdx.app.log(AirStrikeGame.LOG, "player position: " + getPosition().toString());
 		
 		position = position.add(velocity);
 	}

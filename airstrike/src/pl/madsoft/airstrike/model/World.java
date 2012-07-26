@@ -6,7 +6,7 @@ import com.badlogic.gdx.utils.Array;
 public class World {
 
 	Player player;
-    Array<Tile> tiles = new Array<Tile>();
+	Array<Tile> tiles = new Array<Tile>();
 	
     int[][] level1 = {
 		{2,  2,  2,  2,  2,  2,  2 },
@@ -62,6 +62,10 @@ public class World {
 		return player;
 	}
 
+    public void setPlayer(Player player) {
+		this.player = player;
+	}
+	
 	public Array<Tile> getTiles() {
 		return tiles;
 	}
@@ -72,8 +76,6 @@ public class World {
 	}
 
 	private void createDemoWorld() {
-		player = new Player(new Vector2(3f, 0.25f));
-		
 		for (int y = 0; y < 46; y++) {
 			for (int x = 0; x < 7; x++) {
 				tiles.add(new Tile(new Vector2(x, y), level1[45 - y][x]));

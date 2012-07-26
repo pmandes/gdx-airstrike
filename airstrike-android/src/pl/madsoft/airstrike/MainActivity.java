@@ -19,6 +19,7 @@ public class MainActivity extends AndroidApplication {
         cfg.useWakelock = true;
         cfg.useGL20 = true;
         
+
         initialize(new AirStrikeGame(), cfg);
     }
 }
