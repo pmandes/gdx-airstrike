@@ -12,6 +12,8 @@ public class Main {
 		cfg.useGL20 = true;
 		cfg.width = 480;
 		cfg.height = 800;
+		//cfg.width = 320;
+		//cfg.height = 480;
 		
 		new LwjglApplication(new AirStrikeGame(), cfg);
 	}

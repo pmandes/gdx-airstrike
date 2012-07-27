@@ -15,12 +15,19 @@ public class Player {
 	public static final float HEIGHT = 1.33f;
 	public static final float WIDTH = 0.907f;
 	
-	//public static final float START_V_SPEED = 0.01334f; 
-	public static final float START_V_SPEED = 0.04f;
+	public static final float MIN_POS_X = 0f;  
+	public static final float MAX_POS_X = 7f - WIDTH;
+	
+	public static final float START_V_SPEED = 0.02667f; 
+	//public static final float START_V_SPEED = 0.04f;
 	
 	Vector2   position = new Vector2();
     Vector2   velocity = new Vector2(0, START_V_SPEED);
-    Rectangle bounds = new Rectangle();
+    public Vector2 getVelocity() {
+		return velocity;
+	}
+
+	Rectangle bounds = new Rectangle();
 	State     state = State.INFLIGTH;
 
     public Vector2 getPosition() {
@@ -29,7 +36,7 @@ public class Player {
 
 	public void setVelocity(Vector2 velocity) {
 		this.velocity = velocity;
-	}    
+	}
     
 	public Rectangle getBounds() {
 		return bounds;
@@ -45,10 +52,20 @@ public class Player {
 	
 	public void updatePosition() {
 		
-		//Gdx.app.log(AirStrikeGame.LOG, "player position: " + getPosition().toString());
+		Gdx.app.log(AirStrikeGame.LOG, "player position: " + getPosition().toString() + " -> velocity: " + velocity.toString());
 		
-		position = position.add(velocity);
-	}
+		Vector2 newPosition = new Vector2(position);
+		newPosition.add(velocity);
+		
+		if (newPosition.x <= MIN_POS_X) {
+			newPosition.set(MIN_POS_X, newPosition.y);
+		}
+		
+		if (newPosition.x >= MAX_POS_X) {
+			newPosition.set(MAX_POS_X, newPosition.y);		
+		}
 
+		position.set(newPosition);
+	}
 
 }

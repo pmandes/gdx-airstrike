@@ -6,6 +6,7 @@ import pl.madsoft.airstrike.view.PlayerJet2D;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Peripheral;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -31,12 +32,13 @@ public class GameScreen extends AbstractScreen {
 		super(game);
 		
 		Gdx.app.log(AirStrikeGame.LOG, "GameScreen");
+		Gdx.app.log(AirStrikeGame.LOG, "Accelerometer > " + Gdx.input.isPeripheralAvailable(Peripheral.Accelerometer));
 	}
 
 	@Override
 	public void render(float delta) {
 		
-//		/Gdx.app.log(AirStrikeGame.LOG, "delta >" + delta);
+		//Gdx.app.log(AirStrikeGame.LOG, "delta >" + delta);
 		
 		stage.act(delta);
 		
@@ -55,7 +57,7 @@ public class GameScreen extends AbstractScreen {
 	@Override
 	public void show() {
 		
-		player = new Player(new Vector2(3f, 0f));
+		player = new Player(new Vector2(3f, 0.25f));
 		playerTexture = new Texture(Gdx.files.internal("images/f35.png"));		
 		playerJet = PlayerJet2D.create(player, playerTexture);
 
@@ -65,7 +67,6 @@ public class GameScreen extends AbstractScreen {
 		
 		cloudsTexture = new Texture(Gdx.files.internal("images/clouds.png"));
 		cloudsImage = new Image(cloudsTexture);
-		
 		
 		Gdx.app.log(AirStrikeGame.LOG, "tiled map > " + tiledMap.width + "x" + tiledMap.height + " -> " + tiledMap.tileWidth + "x" + tiledMap.tileHeight);	
 
