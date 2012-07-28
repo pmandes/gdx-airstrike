@@ -39,13 +39,15 @@ public class GameScreen extends AbstractScreen {
 	public void render(float delta) {
 		
 		//Gdx.app.log(AirStrikeGame.LOG, "delta >" + delta);
+		Gdx.app.log(AirStrikeGame.LOG, "GameScreen camera position: " +  stage.getCamera().position);	
 		
 		stage.act(delta);
 		
 		Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		stage.getCamera().translate(0, 2f, 0);
+		moveCamera();
+
 		cloudsImage.translate(0, -2f);
 
 		tileMapRenderer.render((OrthographicCamera) stage.getCamera());
@@ -54,8 +56,32 @@ public class GameScreen extends AbstractScreen {
 	}
 
 
+	private void moveCamera() {
+
+		float cx = 0f, cy = 2f;
+		
+		if (player.getPosition().x > 4f && stage.getCamera().position.x < 280f) {
+			cx = 2f;
+		}
+		if (player.getPosition().x < 3f && stage.getCamera().position.x > 240f) {
+			cx = -2f;
+		}
+		
+		stage.getCamera().translate(cx, cy, 0);
+	}
+
 	@Override
 	public void show() {
+
+		Gdx.app.log(AirStrikeGame.LOG, "GameScreen camera position: " +  stage.getCamera().position);
+		
+		stage.act();
+		stage.getCamera().translate(50f, 0, 0);
+		stage.getCamera().update(true);
+		stage.draw();
+
+		Gdx.app.log(AirStrikeGame.LOG, "GameScreen camera position: " +  stage.getCamera().position);		
+		
 		
 		player = new Player(new Vector2(3f, 0.25f));
 		playerTexture = new Texture(Gdx.files.internal("images/f35.png"));		
