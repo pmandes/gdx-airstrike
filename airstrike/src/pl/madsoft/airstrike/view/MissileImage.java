@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class MissileImage extends Image {
 
-	private TextureRegion texture;
 	private Missile missile;
 	private float ppuX;
 	private float ppuY; 
@@ -17,7 +16,6 @@ public class MissileImage extends Image {
 		
 		super(texture);
 		
-		this.texture = texture;
 		this.missile = missile;
 
 		ppuX = (float) AbstractScreen.GAME_VIEWPORT_WIDTH / AbstractScreen.CAMERA_WIDTH;
@@ -37,7 +35,6 @@ public class MissileImage extends Image {
 	private void moveMissile() {
 
 		missile.updatePosition();
-
 		
 		this.setX(missile.getPosition().x * ppuX);
 		this.setY(missile.getPosition().y * ppuY);

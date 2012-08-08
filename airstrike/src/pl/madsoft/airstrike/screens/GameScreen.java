@@ -2,7 +2,7 @@ package pl.madsoft.airstrike.screens;
 
 import pl.madsoft.airstrike.AirStrikeGame;
 import pl.madsoft.airstrike.model.Player;
-import pl.madsoft.airstrike.view.PlayerJet2D;
+import pl.madsoft.airstrike.view.PlayerImage;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -19,7 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class GameScreen extends AbstractScreen {
 
-	private PlayerJet2D playerImage;
+	private PlayerImage playerImage;
 	private Player player;
 	private TileMapRenderer tileMapRenderer;
 	private Texture cloudsTexture;
@@ -52,7 +52,7 @@ public class GameScreen extends AbstractScreen {
 		player = new Player(new Vector2(3f, 0.25f));
 		Texture playerTexture = new Texture(Gdx.files.internal("images/f35.png"));
 		TextureRegion playerTextureRegion = new TextureRegion(playerTexture, 0, 0, 68, 100);
-		playerImage = PlayerJet2D.create(player, playerTexture, playerTextureRegion);
+		playerImage = PlayerImage.create(player, playerTexture, playerTextureRegion);
 		
 		TiledMap tiledMap = TiledLoader.createMap(Gdx.files.internal("data/sample-level.tmx"));
 		SimpleTileAtlas tileAtlas = new SimpleTileAtlas(tiledMap, Gdx.files.internal("data"));
