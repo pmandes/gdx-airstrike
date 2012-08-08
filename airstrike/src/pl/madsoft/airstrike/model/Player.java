@@ -1,5 +1,7 @@
 package pl.madsoft.airstrike.model;
 
+import pl.madsoft.airstrike.model.Player.State;
+
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -7,7 +9,7 @@ import com.badlogic.gdx.utils.Array;
 public class Player {
 
 	public enum State {
-		INFLIGTH, EXPLODING
+		INFLIGTH, EXPLODING, FIRINGGUN
 	}
 
 	public static final float HEIGHT = 1.33f;
@@ -22,13 +24,6 @@ public class Player {
 	
 	Vector2   position = new Vector2();
     Vector2   velocity = new Vector2(0, START_V_SPEED);
-    
-    Array<Vector2> missiles = new Array<Vector2>();
-    
-    public Array<Vector2> getMissiles() {
-    	
-    	return missiles;
-    }
     
     public Vector2 getVelocity() {
 		return velocity;
@@ -75,9 +70,12 @@ public class Player {
 		position.set(newPosition);
 	}
 
-	public void addNewGunMissile() {
-		
-		missiles.add(new Vector2(position));
+	public void setState(State state) {
+		this.state = state;
+	}
+
+	public Object getState() {
+		return this.state;
 	}
 
 }

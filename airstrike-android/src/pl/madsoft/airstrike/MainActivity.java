@@ -11,13 +11,12 @@ public class MainActivity extends AndroidApplication {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
+        AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration( );
 
         cfg.useAccelerometer = true;
         cfg.useCompass = false;
         cfg.useWakelock = true;
         cfg.useGL20 = true;
-
         
         initialize(new AirStrikeGame(), cfg);
     }

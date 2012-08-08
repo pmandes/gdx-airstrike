@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer;
 import com.badlogic.gdx.graphics.g2d.tiled.TiledLoader;
 import com.badlogic.gdx.graphics.g2d.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class GameScreen extends AbstractScreen {
@@ -63,7 +64,9 @@ public class GameScreen extends AbstractScreen {
 		
 		stage.addActor(cloudsImage);
 		stage.addActor(playerImage);
-		
+	
+        stage.getRoot().getColor().a = 0f;
+        stage.getRoot().addAction(Actions.fadeIn(0.5f));		
 	}
 
 	private void moveCamera() {
@@ -78,6 +81,6 @@ public class GameScreen extends AbstractScreen {
 		}
 		
 		stage.getCamera().translate(cx, cy, 0);
-	}	
+	}
 	
 }
