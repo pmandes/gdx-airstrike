@@ -1,8 +1,5 @@
 package pl.madsoft.airstrike.model;
 
-import pl.madsoft.airstrike.AirStrikeGame;
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -19,8 +16,8 @@ public class Player {
 	public static final float MIN_POS_X = 0f;  
 	public static final float MAX_POS_X = 7f - WIDTH;
 
-	public static final float START_V_SPEED = 0f;
-	//public static final float START_V_SPEED = 0.02667f; 
+	//public static final float START_V_SPEED = 0f;
+	public static final float START_V_SPEED = 0.02667f; 
 	//public static final float START_V_SPEED = 0.04f;
 	
 	Vector2   position = new Vector2();

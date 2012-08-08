@@ -117,11 +117,21 @@ public class PlayerJet2D extends Image {
 		
 		Gdx.app.log(AirStrikeGame.LOG, "SHOT!: " + player.getPosition().toString());
 		
-		Missile missile = new Missile(player.getPosition());
+		Vector2 mslPos = new Vector2(player.getPosition());
+		float mslX = player.getBounds().width / 2 - 0.12f;
+		float mslY = player.getBounds().height - 0.3f;
+		mslPos.add(new Vector2(mslX, mslY));
+		Missile missile = new Missile(mslPos);
 		TextureRegion missileTextureRegion = new TextureRegion(texture, 76, 3, 10, 10);		
 		MissileImage missileImage = new MissileImage(missile, missileTextureRegion);
 
-		this.getStage().addActor(missileImage);		
+
+
+		Gdx.app.log(AirStrikeGame.LOG, "missile actor: " + missileImage.getOriginX() + " - " + missileImage.getOriginX()); 
+		
+		this.getStage().addActor(missileImage);
+
+		
 	}
 
 	private void processInputAccelerometer() {

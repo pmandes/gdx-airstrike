@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Missile {
 
-	public static final float SPEED = 10f;
+	public static final float SPEED = 0.22f;
 	
 	Vector2 position = new Vector2();
 	Vector2 velocity = new Vector2(0, SPEED);
