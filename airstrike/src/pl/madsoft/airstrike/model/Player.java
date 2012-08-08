@@ -5,6 +5,7 @@ import pl.madsoft.airstrike.AirStrikeGame;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 public class Player {
 
@@ -17,12 +18,21 @@ public class Player {
 	
 	public static final float MIN_POS_X = 0f;  
 	public static final float MAX_POS_X = 7f - WIDTH;
-	
-	public static final float START_V_SPEED = 0.02667f; 
+
+	public static final float START_V_SPEED = 0f;
+	//public static final float START_V_SPEED = 0.02667f; 
 	//public static final float START_V_SPEED = 0.04f;
 	
 	Vector2   position = new Vector2();
     Vector2   velocity = new Vector2(0, START_V_SPEED);
+    
+    Array<Vector2> missiles = new Array<Vector2>();
+    
+    public Array<Vector2> getMissiles() {
+    	
+    	return missiles;
+    }
+    
     public Vector2 getVelocity() {
 		return velocity;
 	}
@@ -52,7 +62,7 @@ public class Player {
 	
 	public void updatePosition() {
 		
-		Gdx.app.log(AirStrikeGame.LOG, "player position: " + getPosition().toString() + " -> velocity: " + velocity.toString());
+		//Gdx.app.log(AirStrikeGame.LOG, "player position: " + getPosition().toString() + " -> velocity: " + velocity.toString());
 		
 		Vector2 newPosition = new Vector2(position);
 		newPosition.add(velocity);
@@ -66,6 +76,11 @@ public class Player {
 		}
 
 		position.set(newPosition);
+	}
+
+	public void addNewGunMissile() {
+		
+		missiles.add(new Vector2(position));
 	}
 
 }

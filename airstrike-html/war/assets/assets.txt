@@ -1,6 +1,7 @@
 d:
 d:data
-i:data/libgdx.png
+b:data/sample-level.tmx
 d:images
+i:images/airstrike.png
 i:images/bckgrnd.png
 i:images/f35.png

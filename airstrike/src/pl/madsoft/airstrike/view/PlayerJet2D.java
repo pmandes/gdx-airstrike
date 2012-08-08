@@ -4,14 +4,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import pl.madsoft.airstrike.AirStrikeGame;
+import pl.madsoft.airstrike.model.Missile;
 import pl.madsoft.airstrike.model.Player;
 import pl.madsoft.airstrike.screens.AbstractScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Peripheral;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -21,6 +25,9 @@ import com.badlogic.gdx.utils.Scaling;
 public class PlayerJet2D extends Image {
 	
 	private Player player;
+	private Texture texture;
+	private TextureRegion textureRegion;
+	
 	ShapeRenderer shapeRenderer = new ShapeRenderer();	
 	
 	private float ppuX;	// pixels per unit on the X axis
@@ -41,11 +48,14 @@ public class PlayerJet2D extends Image {
         keys.put(Keys.FIRE, false);
     };
 	
-	private PlayerJet2D (Player player, Texture playerTexture) {
+	private PlayerJet2D (Player player, Texture texture, TextureRegion textureRegion) {
 		
-		super(playerTexture);
-		
+		super(textureRegion);
+
 		this.player = player;
+		this.texture = texture;
+		this.textureRegion = textureRegion;
+		
 		ppuX = (float) AbstractScreen.GAME_VIEWPORT_WIDTH / AbstractScreen.CAMERA_WIDTH;
 		ppuY = (float) AbstractScreen.GAME_VIEWPORT_HEIGHT / AbstractScreen.CAMERA_HEIGHT;
 		
@@ -53,11 +63,9 @@ public class PlayerJet2D extends Image {
 		Gdx.app.log(AirStrikeGame.LOG, "Player2D Accelerometer: " + isAccelerometer); 
 	}
 	
-	public static PlayerJet2D create(Player player, Texture playerTexture) {
+	public static PlayerJet2D create(Player player, Texture texture, TextureRegion textureRegion) {
 
-		playerTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-
-		return new PlayerJet2D(player, playerTexture);
+		return new PlayerJet2D(player, texture, textureRegion);
 	}
 
 	@Override
@@ -72,6 +80,12 @@ public class PlayerJet2D extends Image {
 		movePlane(delta);
 	}
 
+	@Override
+	public void draw(SpriteBatch batch, float parentAlpha) {
+
+		super.draw(batch, parentAlpha);
+	}
+		
 	private void processInputKeys() {
 		
 		keys.put(Keys.LEFT, Gdx.input.isKeyPressed(Input.Keys.LEFT)); 
@@ -91,7 +105,23 @@ public class PlayerJet2D extends Image {
 		if ((keys.get(Keys.LEFT) && keys.get(Keys.RIGHT)) || (!keys.get(Keys.LEFT) && !(keys.get(Keys.RIGHT)))) {
 			flightX(0f);
 		}
-				
+
+		if (keys.get(Keys.FIRE)) {
+			fireGun();
+		}
+	}
+
+	private void fireGun() {
+		
+		player.addNewGunMissile();
+		
+		Gdx.app.log(AirStrikeGame.LOG, "SHOT!: " + player.getPosition().toString());
+		
+		Missile missile = new Missile(player.getPosition());
+		TextureRegion missileTextureRegion = new TextureRegion(texture, 76, 3, 10, 10);		
+		MissileImage missileImage = new MissileImage(missile, missileTextureRegion);
+
+		this.getStage().addActor(missileImage);		
 	}
 
 	private void processInputAccelerometer() {
@@ -122,4 +152,5 @@ public class PlayerJet2D extends Image {
 		setScaling(Scaling.stretch);
 		setBounds(px, py, player.getBounds().width * ppuX, player.getBounds().height * ppuY);
 	}
+	
 }
