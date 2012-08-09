@@ -12,6 +12,12 @@ public class Missile {
 	Vector2 position = new Vector2();
 	Vector2 velocity = new Vector2(0, SPEED);
 	
+	private float lifeTime = 100;
+	
+	public float getLifeTime() {
+		return this.lifeTime;
+	}
+	
 	public Missile(float x, float y) {
 		
 		this.position.set(x, y);
@@ -27,6 +33,10 @@ public class Missile {
     public Vector2 getPosition() {
 		return position;
 	}
+    
+    public void setVelocity(Vector2 velocity) {
+    	this.velocity = velocity;
+    }
 
 	public void updatePosition() {
 
@@ -34,6 +44,10 @@ public class Missile {
 
 		newPosition.add(velocity);
 		position.set(newPosition);
+		
+		if (lifeTime > 0) {
+			lifeTime--;
+		}
 	}
 	
 }

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="7" height="45" tilewidth="75" tileheight="75">
+ <tileset firstgid="1" name="bckgrnd" tilewidth="75" tileheight="75">
+  <image source="bckgrnd.png" width="75" height="1275"/>
+ </tileset>
+ <tileset firstgid="18" name="sprites" tilewidth="128" tileheight="128">
+  <image source="sprites.png" width="128" height="768"/>
+ </tileset>
+ <layer name="Level" width="7" height="45">
+  <data encoding="base64" compression="zlib">
+   eJyNlNkOgzAMBAPlaMOR8P8/C0i2uhoM4sEC7cTE3ji0KaX2JtYbvRzRBNz1yZ410Dthm73/jvgYmy3H2VdYBTujN6a1LMLO3DHgzsg3MNb7lg3opQ90ZR10981ZTVefySI/ySI/6RmZekavtYecrnPhrJGoYD4v2r/2Tv2pv/4lWx+Y1rjAM56R+5Itp1g/q307W84mdY+2dpF1vseQ/vM0ybose5ebc/C92QPnZYZOPzlH9Ew9ie4QeeSp3gfWqrPE/wF1zi915TtszAiV
+  </data>
+ </layer>
+ <objectgroup name="Enemies" width="7" height="45">
+  <object gid="19" x="150" y="525"/>
+  <object gid="19" x="75" y="825"/>
+  <object gid="20" x="225" y="900"/>
+  <object gid="20" x="225" y="750"/>
+  <object gid="20" x="300" y="900"/>
+  <object gid="20" x="300" y="900"/>
+  <object gid="20" x="300" y="900"/>
+  <object gid="20" x="300" y="1050"/>
+  <object gid="19" x="0" y="1125"/>
+  <object gid="19" x="150" y="1125"/>
+  <object gid="21" x="75" y="1350"/>
+  <object gid="21" x="300" y="1575"/>
+  <object gid="22" x="75" y="1800"/>
+  <object gid="21" x="75" y="2025"/>
+  <object gid="21" x="225" y="2700"/>
+  <object gid="21" x="150" y="2175"/>
+  <object gid="21" x="300" y="1725"/>
+  <object gid="22" x="225" y="2850"/>
+  <object gid="22" x="300" y="2025"/>
+  <object gid="22" x="300" y="1350"/>
+  <object gid="22" x="300" y="450"/>
+  <object gid="22" x="300" y="525"/>
+  <object gid="19" x="75" y="1500"/>
+  <object gid="20" x="225" y="1875"/>
+  <object gid="20" x="225" y="2250"/>
+  <object gid="20" x="0" y="2475"/>
+  <object gid="19" x="375" y="2475"/>
+  <object gid="19" x="0" y="2850"/>
+  <object gid="19" x="150" y="2925"/>
+  <object gid="19" x="225" y="3075"/>
+  <object gid="19" x="0" y="150"/>
+  <object gid="20" x="225" y="225"/>
+  <object gid="20" x="375" y="150"/>
+ </objectgroup>
+</map>

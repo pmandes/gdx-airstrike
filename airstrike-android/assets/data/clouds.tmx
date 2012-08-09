@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="2" height="10" tilewidth="480" tileheight="768">
+ <tileset firstgid="1" name="clouds" tilewidth="480" tileheight="768">
+  <image source="clouds.png" width="480" height="768"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="2" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjZGBgYKQiBgADmAAV
+  </data>
+ </layer>
+</map>
