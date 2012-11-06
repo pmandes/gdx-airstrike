@@ -19,6 +19,7 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Scaling;
 
@@ -34,6 +35,7 @@ public class PlayerImage extends Image {
 	private float ppuY;	// pixels per unit on the Y axis
 	
 	private boolean isAccelerometer;
+	private Body body;
 	
 	enum Keys {
         LEFT, RIGHT, FORWARD, BACK, FIRE
@@ -165,6 +167,8 @@ public class PlayerImage extends Image {
 
 		setScaling(Scaling.stretch);
 		setBounds(px, py, player.getBounds().width * ppuX, player.getBounds().height * ppuY);
+		
+		body.setTransform(px + 34, py + 48, 0.0f);
 	}
 
 	public class PlayerGestureListener implements GestureListener {
@@ -227,6 +231,11 @@ public class PlayerImage extends Image {
 			}
 
 		}
+
+	public void setBody(Body playerBody) {
+		this.body = playerBody;
+		
+	}
 	
 }
 

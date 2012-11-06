@@ -1,9 +1,12 @@
 package pl.madsoft.airstrike.view;
 
+import pl.madsoft.airstrike.AirStrikeGame;
 import pl.madsoft.airstrike.model.Missile;
 import pl.madsoft.airstrike.screens.AbstractScreen;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class MissileImage extends Image {
@@ -38,6 +41,12 @@ public class MissileImage extends Image {
 		
 		this.setX(missile.getPosition().x * ppuX);
 		this.setY(missile.getPosition().y * ppuY);
+		
+		Actor a = this.hit(missile.getPosition().x , missile.getPosition().y);
+				
+		if (a != null) {
+			Gdx.app.log(AirStrikeGame.LOG, "hit!!!! " + a.toString());
+		}
 	}
 	
 

@@ -21,12 +21,19 @@ import com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer;
 import com.badlogic.gdx.graphics.g2d.tiled.TiledLoader;
 import com.badlogic.gdx.graphics.g2d.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 
 public class GameScreen extends AbstractScreen {
 
+	private static final int BOX_VELOCITY_ITERATIONS = 6;
+	private static final int BOX_POSITION_ITERATIONS = 2;
 	private PlayerImage playerImage;
 	private Player player;
 
@@ -36,6 +43,9 @@ public class GameScreen extends AbstractScreen {
 	private TileMapRenderer cloudsMapRenderer;
 	private TileMapRenderer tileMapRenderer;
 	private BitmapFont font;
+	private World world;
+	private Box2DDebugRenderer debugRenderer;
+	private float BOX_TO_WORLD = 75.0f;
 	
 	public GameScreen(Game game) {
 		super(game);
@@ -57,6 +67,9 @@ public class GameScreen extends AbstractScreen {
 		tileMapRenderer.render((OrthographicCamera) stage.getCamera());
 		cloudsMapRenderer.render((OrthographicCamera) stage.getCamera());
 		
+		debugRenderer.render(world, stage.getCamera().combined);
+		world.step(1/60f, BOX_VELOCITY_ITERATIONS, BOX_POSITION_ITERATIONS);
+		
 		stage.draw();
 		
 		//font.draw(stage.getSpriteBatch(), "FPS: " + Gdx.graphics.getFramesPerSecond(), 20, 20);
@@ -65,12 +78,31 @@ public class GameScreen extends AbstractScreen {
 	@Override
 	public void show() {
 
+		world = new World(new Vector2(0.0f, 0.0f), true);
+		debugRenderer = new Box2DDebugRenderer();
+		
 		Gdx.app.log(AirStrikeGame.LOG, "GameScreen camera position: " +  stage.getCamera().position);
 		
 		player = new Player(new Vector2(3f, 0.25f));
 		Texture playerTexture = new Texture(Gdx.files.internal("images/sprites.png"));
 		TextureRegion playerTextureRegion = new TextureRegion(playerTexture, 0, 0, 68, 100);
 		playerImage = PlayerImage.create(player, playerTexture, playerTextureRegion);
+		
+		BodyDef playerBodyDef = new BodyDef();
+		playerBodyDef.type = BodyType.KinematicBody;
+		
+		playerBodyDef.position.set(new Vector2(200,400));
+		
+		Body playerBody = world.createBody(playerBodyDef);
+		
+		PolygonShape playerBox = new PolygonShape();
+		//playerBox.setAsBox(player.getBounds().width, player.getBounds().height);
+		playerBox.setAsBox(34, 50);
+		playerBody.createFixture(playerBox, 0.0f);
+		//playerBody.setLinearVelocity(0.0f, 120.0f);
+		
+		playerImage.setBody(playerBody); 
+		
 		
 		TiledMap tiledMap = TiledLoader.createMap(Gdx.files.internal("data/sample-level.tmx"));
 		SimpleTileAtlas tileAtlas = new SimpleTileAtlas(tiledMap, Gdx.files.internal("data"));
