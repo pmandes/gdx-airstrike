@@ -5,7 +5,27 @@
  </tileset>
  <layer name="Tile Layer 1" width="7" height="45">
   <data encoding="base64" compression="zlib">
-   eJyNlNkOgzAMBAPlaMOR8P8/C0i2uhoM4sEC7cTE3ji0KaX2JtYbvRzRBNz1yZ410Dthm73/jvgYmy3H2VdYBTujN6a1LMLO3DHgzsg3MNb7lg3opQ90ZR10981ZTVefySI/ySI/6RmZekavtYecrnPhrJGoYD4v2r/2Tv2pv/4lWx+Y1rjAM56R+5Itp1g/q307W84mdY+2dpF1vseQ/vM0ybose5ebc/C92QPnZYZOPzlH9Ew9ie4QeeSp3gfWqrPE/wF1zi915TtszAiV
+   eJyNlNkOgzAMBAPlaMMV/v9nAclWV4ODeLBAOzGxNyZtSqmtxFrRtzOagLs+2bMEeidst/ffGR9js+U4+worYFf0xrSWRdiVOwbcGfkOxnrfsgG99IGurIPuvjkr6e4zWeQnWeQnPSNTz+i19pDTfS6cNRIFzOdF+9feqT/1179k6wPTGhd4xjNyX7LlbNbPat/OlrNL3aOtXWSd7zGk/zxNsi7L3lvlHHxv9sB5maHTT84RPVNPon+IPPJU/wfWqrPE+4A657d2l138AGu0CIs=
   </data>
  </layer>
+ <objectgroup name="Object Layer 1" width="7" height="45">
+  <object name="rocks1" x="0" y="3150">
+   <polyline points="0,0 75,0 150,-75 150,-150 75,-225 75,-300 75,-375 75,-450 75,-525 75,-600 0,-600"/>
+  </object>
+  <object name="rocks3" x="150" y="2400">
+   <polyline points="0,0 75,75 150,75 225,0 150,-75 75,-75 0,0"/>
+  </object>
+  <object name="rocks2" x="525" y="2625">
+   <polyline points="0,0 -75,0 -75,75 -150,150 -225,225 -150,300 -75,375 -75,450 -75,525 0,525"/>
+  </object>
+  <object name="rocks5" x="525" y="2250">
+   <polyline points="0,0 -75,0 -75,-75 -150,-150 -150,-375 -75,-450 -75,-900 -150,-975 -75,-1050 -75,-1800 -150,-1875 -75,-1950 0,-1950"/>
+  </object>
+  <object name="rocks4" x="0" y="2250">
+   <polyline points="0,0 75,0 75,-450 0,-450"/>
+  </object>
+  <object name="rocks6" x="0" y="1575">
+   <polyline points="0,0 75,0 75,-525 225,-675 225,-825 75,-975 75,-1275 0,-1275"/>
+  </object>
+ </objectgroup>
 </map>
