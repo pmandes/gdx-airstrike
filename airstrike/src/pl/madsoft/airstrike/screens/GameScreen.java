@@ -80,6 +80,7 @@ public class GameScreen extends AbstractScreen {
 
 		world = new World(new Vector2(0.0f, 0.0f), true);
 		debugRenderer = new Box2DDebugRenderer();
+
 		
 		Gdx.app.log(AirStrikeGame.LOG, "GameScreen camera position: " +  stage.getCamera().position);
 		
