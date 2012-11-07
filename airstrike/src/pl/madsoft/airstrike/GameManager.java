@@ -94,6 +94,8 @@ public class GameManager {
 			bodyDef.position.set(tiledObject.x ,(tiledMap.height * tiledMap.tileHeight) - tiledObject.y);
 			Body body = world.createBody(bodyDef);
 			body.createFixture(cs, 0.0f);
+			
+			body.setUserData(tiledObject);
 		}
 
 		TileMapRenderer tileMapRenderer = new TileMapRenderer(tiledMap, tileAtlas, 7, 45);

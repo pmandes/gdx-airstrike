@@ -35,7 +35,7 @@ public class AirStrikeGame extends Game {
 	
 	public void render() {
 		super.render();
-		fpsLogger.log(); 
+		//fpsLogger.log(); 
 	}
 	
 	// screens

@@ -1,13 +1,18 @@
 package pl.madsoft.airstrike.model;
 
+import pl.madsoft.airstrike.AirStrikeGame;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class Player {
 
+    private Actor actor;
+	
 	public enum State {
-		INFLIGTH, EXPLODING, FIRINGGUN
+		INFLIGTH, FIRINGGUN, EXPLODING, DEAD
 	}
 
 	public static final float HEIGHT = 1.33f;
@@ -25,15 +30,13 @@ public class Player {
 	
 	Vector2 position = new Vector2();
     Vector2 velocity = new Vector2(0, START_V_SPEED);
-    
-    private Actor actor;
+
+	Rectangle bounds = new Rectangle();
+	State      state = State.INFLIGTH;
     
     public Vector2 getVelocity() {
 		return velocity;
 	}
-
-	Rectangle bounds = new Rectangle();
-	State     state = State.INFLIGTH;
 
     public Vector2 getPosition() {
 		return position;
@@ -59,21 +62,27 @@ public class Player {
 		
 		//Gdx.app.log(AirStrikeGame.LOG, "player position: " + getPosition().toString() + " -> velocity: " + velocity.toString());
 		
+	
 		Vector2 newPosition = new Vector2(position);
 		newPosition.add(velocity);
 		
-		if (newPosition.x <= MIN_POS_X) {
-			newPosition.set(MIN_POS_X, newPosition.y);
-		}
-		
-		if (newPosition.x >= MAX_POS_X) {
-			newPosition.set(MAX_POS_X, newPosition.y);
-		}
-
+		//if (state != State.EXPLODING) {
+			if (newPosition.x <= MIN_POS_X) {
+				newPosition.set(MIN_POS_X, newPosition.y);
+			}
+			
+			if (newPosition.x >= MAX_POS_X) {
+				newPosition.set(MAX_POS_X, newPosition.y);
+			}
+		//}
+			
 		position.set(newPosition);
 	}
 
 	public void setState(State state) {
+		
+		Gdx.app.log(AirStrikeGame.LOG, "Player.setState() " + getState().toString() + " -> " + state.toString());		
+		
 		this.state = state;
 	}
 

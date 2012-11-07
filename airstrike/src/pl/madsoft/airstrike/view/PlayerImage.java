@@ -6,12 +6,14 @@ import java.util.Map;
 import pl.madsoft.airstrike.AirStrikeGame;
 import pl.madsoft.airstrike.model.Missile;
 import pl.madsoft.airstrike.model.Player;
+import pl.madsoft.airstrike.model.Player.State;
 import pl.madsoft.airstrike.screens.AbstractScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Peripheral;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -21,6 +23,10 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 
 
@@ -40,9 +46,11 @@ public class PlayerImage extends Image {
 	enum Keys {
         LEFT, RIGHT, FORWARD, BACK, FIRE
     }
-	
+
     static Map<Keys, Boolean> keys = new HashMap<Keys, Boolean>();
 	private PlayerGestureListener gestureListener;
+	private Animation explosion;
+
     static {
         keys.put(Keys.LEFT, false);
         keys.put(Keys.RIGHT, false);
@@ -67,6 +75,17 @@ public class PlayerImage extends Image {
 		gestureListener = new PlayerGestureListener();
 		gestureListener.setPlayer(this);
 		Gdx.input.setInputProcessor(new GestureDetector(gestureListener));
+		
+		
+		Texture explosionTexture = new Texture(Gdx.files.internal("images/expl1.png"));
+		Array<TextureRegion> keyFrames = new Array<TextureRegion>();		
+		
+		for (int i = 0; i < 12; i++) {
+			TextureRegion tr = new TextureRegion(explosionTexture, 0, 0, 100, 100);
+			keyFrames.add(tr);
+		}
+		
+		explosion = new Animation(0.2f, keyFrames, Animation.NORMAL);		
 	}
 	
 	public static PlayerImage create(Player player, Texture texture, TextureRegion textureRegion) {
@@ -78,12 +97,25 @@ public class PlayerImage extends Image {
 	public void act(float delta) {
 		super.act(delta);
 
-		processInputKeys();
-		if (isAccelerometer) {
-			processInputAccelerometer();
+		if (player.getState().equals(Player.State.INFLIGTH) || player.getState().equals(Player.State.FIRINGGUN)) {
+
+			processInputKeys();
+			if (isAccelerometer) {
+				processInputAccelerometer();
+			}
+
+			movePlane(delta);
 		}
 
-		movePlane(delta);
+		if (player.getState().equals(Player.State.EXPLODING)) {
+			death();
+		}
+
+		if (player.getState().equals(Player.State.DEAD)) {
+			
+			// IF (lifes > 0) respawn, restart level ELSE game over  
+
+		}
 	}
 
 	@Override
@@ -99,7 +131,7 @@ public class PlayerImage extends Image {
 		keys.put(Keys.FORWARD, Gdx.input.isKeyPressed(Input.Keys.UP)); 
 		keys.put(Keys.BACK, Gdx.input.isKeyPressed(Input.Keys.DOWN));
 		keys.put(Keys.FIRE, Gdx.input.isKeyPressed(Input.Keys.SPACE));
-
+		
 		if (keys.get(Keys.LEFT)) {
 			flightX(-0.1f);
 		}
@@ -121,10 +153,27 @@ public class PlayerImage extends Image {
 
 		}
 		if (!keys.get(Keys.FIRE)) {
-			player.setState(Player.State.INFLIGTH);
+			if (player.getState().equals(Player.State.FIRINGGUN)){
+				player.setState(Player.State.INFLIGTH);
+			}
 		}
 	}
 
+	private void death() {
+		
+		if (explosion.isAnimationFinished(1.0f)) {
+			Gdx.app.log(AirStrikeGame.LOG, "PLAYER IS DEAD!!!");
+			player.setState(Player.State.DEAD);
+		}
+
+		//Texture explosionTexture = new Texture(Gdx.files.internal("images/expl1.png"));
+		//TextureRegion tr = new TextureRegion(explosionTexture, 0, 0, 100, 100);			
+		//TextureRegionDrawable trd = new TextureRegionDrawable(tr);
+		//setDrawable(trd);
+		//setWidth(getPrefWidth());
+		//setHeight(getPrefHeight());
+	}	
+	
 	public void fireGun() {
 	
 		Gdx.app.log(AirStrikeGame.LOG, "SHOT!: " + player.getPosition().toString());
@@ -151,7 +200,10 @@ public class PlayerImage extends Image {
 	}
 	
 	private void flightX(float hSpeed) {
-		player.setVelocity(new Vector2(hSpeed, player.getVelocity().y));
+		
+		if (!player.getState().equals(Player.State.EXPLODING)) {
+			player.setVelocity(new Vector2(hSpeed, player.getVelocity().y));
+		}
 	}
 
 	private void movePlane(float delta) {
