@@ -2,6 +2,7 @@ package pl.madsoft.airstrike.model;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class Player {
 
@@ -19,8 +20,13 @@ public class Player {
 	public static final float START_V_SPEED = 0.02667f; 
 	//public static final float START_V_SPEED = 0.04f;
 	
-	Vector2   position = new Vector2();
-    Vector2   velocity = new Vector2(0, START_V_SPEED);
+	public static final float START_POSITION_X = 0;
+	public static final float START_POSITION_Y = 0;
+	
+	Vector2 position = new Vector2();
+    Vector2 velocity = new Vector2(0, START_V_SPEED);
+    
+    private Actor actor;
     
     public Vector2 getVelocity() {
 		return velocity;
@@ -61,7 +67,7 @@ public class Player {
 		}
 		
 		if (newPosition.x >= MAX_POS_X) {
-			newPosition.set(MAX_POS_X, newPosition.y);		
+			newPosition.set(MAX_POS_X, newPosition.y);
 		}
 
 		position.set(newPosition);
@@ -75,4 +81,11 @@ public class Player {
 		return this.state;
 	}
 
+	public Actor getActor() {
+		return this.actor;
+	}
+
+	public void setActor(Actor actor) {
+		this.actor = actor;
+	}
 }

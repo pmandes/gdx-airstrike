@@ -42,6 +42,7 @@ public class PlayerImage extends Image {
     }
 	
     static Map<Keys, Boolean> keys = new HashMap<Keys, Boolean>();
+	private PlayerGestureListener gestureListener;
     static {
         keys.put(Keys.LEFT, false);
         keys.put(Keys.RIGHT, false);
@@ -63,7 +64,7 @@ public class PlayerImage extends Image {
 		isAccelerometer = Gdx.input.isPeripheralAvailable(Peripheral.Accelerometer);
 		Gdx.app.log(AirStrikeGame.LOG, "Player2D Accelerometer: " + isAccelerometer);
 		
-		PlayerGestureListener gestureListener = new PlayerGestureListener();
+		gestureListener = new PlayerGestureListener();
 		gestureListener.setPlayer(this);
 		Gdx.input.setInputProcessor(new GestureDetector(gestureListener));
 	}
