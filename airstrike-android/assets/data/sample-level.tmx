@@ -3,12 +3,12 @@
  <tileset firstgid="1" name="bckgrnd" tilewidth="75" tileheight="75">
   <image source="bckgrnd.png" width="75" height="1275"/>
  </tileset>
- <layer name="Tile Layer 1" width="7" height="45">
+ <layer name="TileLayer" width="7" height="45">
   <data encoding="base64" compression="zlib">
-   eJyNlNkOgzAMBAPlaMMV/v9nAclWV4ODeLBAOzGxNyZtSqmtxFrRtzOagLs+2bMEeidst/ffGR9js+U4+worYFf0xrSWRdiVOwbcGfkOxnrfsgG99IGurIPuvjkr6e4zWeQnWeQnPSNTz+i19pDTfS6cNRIFzOdF+9feqT/1179k6wPTGhd4xjNyX7LlbNbPat/OlrNL3aOtXWSd7zGk/zxNsi7L3lvlHHxv9sB5maHTT84RPVNPon+IPPJU/wfWqrPE+4A657d2l138AGu0CIs=
+   eJyNlNkOgzAMBAPlaMOR8P8/C0i2uhoM4sEC7cTE3ji0KaX2JtYbvRzRBNz1yZ410Dthm73/jvgYmy3H2VdYBTujN6a1LMLO3DHgzsg3MNb7lg3opQ90ZR10981ZTVefySI/ySI/6RmZekavtYecrnPhrJGoYD4v2r/2Tv2pv/4lWx+Y1rjAM56R+5Itp1g/q307W84mdY+2dpF1vseQ/vM0ybose5ebc/C92QPnZYZOPzlH9Ew9ie4QeeSp3gfWqrPE/wF1zi915TtszAiV
   </data>
  </layer>
- <objectgroup name="Object Layer 1" width="7" height="45">
+ <objectgroup name="RocksLayer" width="7" height="45">
   <object name="rocks1" x="0" y="3150">
    <polyline points="0,0 75,0 150,-75 150,-150 75,-225 75,-300 75,-375 75,-450 75,-525 75,-600 0,-600"/>
   </object>
