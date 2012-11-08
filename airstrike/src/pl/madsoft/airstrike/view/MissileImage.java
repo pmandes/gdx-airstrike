@@ -6,6 +6,7 @@ import pl.madsoft.airstrike.screens.AbstractScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
@@ -13,7 +14,8 @@ public class MissileImage extends Image {
 
 	private Missile missile;
 	private float ppuX;
-	private float ppuY; 
+	private float ppuY;
+	private Body body; 
 	
 	public MissileImage(Missile missile, TextureRegion texture) {
 		
@@ -42,12 +44,16 @@ public class MissileImage extends Image {
 		this.setX(missile.getPosition().x * ppuX);
 		this.setY(missile.getPosition().y * ppuY);
 		
-		Actor a = this.hit(missile.getPosition().x , missile.getPosition().y);
-				
-		if (a != null) {
-			Gdx.app.log(AirStrikeGame.LOG, "hit!!!! " + a.toString());
-		}
+		body.setTransform(getX(), getY(), 0.0f);
+		
+		//Actor a = this.hit(missile.getPosition().x , missile.getPosition().y);
+		//if (a != null) {
+			//Gdx.app.log(AirStrikeGame.LOG, "hit!!!! " + a.toString());
+		//}
 	}
-	
+
+	public void setBody(Body body) {
+		this.body = body;
+	}
 
 }

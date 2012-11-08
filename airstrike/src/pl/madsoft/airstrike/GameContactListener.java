@@ -22,13 +22,18 @@ public class GameContactListener  implements ContactListener {
 
 		Fixture fixA = contact.getFixtureA();
 		Fixture fixB = contact.getFixtureB();
-
-		Gdx.app.log(AirStrikeGame.LOG, "beginContact: " +  fixA.getBody().getUserData().toString() + " <> " + fixB.getBody().getUserData().toString());
-
-		Player player = (Player) fixB.getBody().getUserData();
-
-		if (!player.getState().equals(Player.State.EXPLODING)) {
-			player.setState(Player.State.EXPLODING);
+		
+		String objAClassName = fixA.getBody().getUserData().getClass().getSimpleName();
+		String objBClassName = fixB.getBody().getUserData().getClass().getSimpleName();
+		
+		Gdx.app.log(AirStrikeGame.LOG, "beginContact: " +  objAClassName + " <> " + objBClassName);
+		
+		if (objAClassName.equals("TiledObject") && objBClassName.equals("Player")) { 
+			Player player = (Player) fixB.getBody().getUserData();
+	
+			if (!player.getState().equals(Player.State.EXPLODING) && !player.getState().equals(Player.State.DEAD)) {
+				player.setState(Player.State.EXPLODING);
+			}
 		}
 	}
 

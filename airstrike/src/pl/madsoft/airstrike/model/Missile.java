@@ -4,6 +4,7 @@ import pl.madsoft.airstrike.AirStrikeGame;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class Missile {
 
@@ -13,6 +14,8 @@ public class Missile {
 	Vector2 velocity = new Vector2(0, SPEED);
 	
 	private float lifeTime = 100;
+
+	private Actor actor;
 	
 	public float getLifeTime() {
 		return this.lifeTime;
@@ -50,4 +53,11 @@ public class Missile {
 		}
 	}
 	
+	public Actor getActor() {
+		return this.actor;
+	}
+
+	public void setActor(Actor actor) {
+		this.actor = actor;
+	}	
 }

@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import pl.madsoft.airstrike.AirStrikeGame;
+import pl.madsoft.airstrike.GameManager;
 import pl.madsoft.airstrike.model.Missile;
 import pl.madsoft.airstrike.model.Player;
-import pl.madsoft.airstrike.model.Player.State;
 import pl.madsoft.airstrike.screens.AbstractScreen;
 
 import com.badlogic.gdx.Gdx;
@@ -23,9 +23,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 
@@ -49,7 +46,10 @@ public class PlayerImage extends Image {
 
     static Map<Keys, Boolean> keys = new HashMap<Keys, Boolean>();
 	private PlayerGestureListener gestureListener;
+
 	private Animation explosion;
+	private TextureRegion currentFrame;
+	private float stateTime;
 
     static {
         keys.put(Keys.LEFT, false);
@@ -81,11 +81,12 @@ public class PlayerImage extends Image {
 		Array<TextureRegion> keyFrames = new Array<TextureRegion>();		
 		
 		for (int i = 0; i < 12; i++) {
-			TextureRegion tr = new TextureRegion(explosionTexture, 0, 0, 100, 100);
+			TextureRegion tr = new TextureRegion(explosionTexture, i * 96, 0, 96, 96);
 			keyFrames.add(tr);
 		}
 		
-		explosion = new Animation(0.2f, keyFrames, Animation.NORMAL);		
+		explosion = new Animation(0.05f, keyFrames, Animation.NORMAL);
+		stateTime = 0f;
 	}
 	
 	public static PlayerImage create(Player player, Texture texture, TextureRegion textureRegion) {
@@ -97,113 +98,75 @@ public class PlayerImage extends Image {
 	public void act(float delta) {
 		super.act(delta);
 
-		if (player.getState().equals(Player.State.INFLIGTH) || player.getState().equals(Player.State.FIRINGGUN)) {
+		if (!player.getState().equals(Player.State.DEAD)) {
 
-			processInputKeys();
-			if (isAccelerometer) {
-				processInputAccelerometer();
+			if (!player.getState().equals(Player.State.EXPLODING)) {
+			
+				processInputKeys();
+				if (isAccelerometer) {
+					processInputAccelerometer();
+				}
 			}
-
-			movePlane(delta);
 		}
 
+		movePlane(delta);
+		
 		if (player.getState().equals(Player.State.EXPLODING)) {
-			death();
+			die();
 		}
 
 		if (player.getState().equals(Player.State.DEAD)) {
+
+			rotate(-0.2f);
+			scale(-0.003f);
 			
 			// IF (lifes > 0) respawn, restart level ELSE game over  
-
 		}
 	}
+
 
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
 
 		super.draw(batch, parentAlpha);
-	}
 		
-	private void processInputKeys() {
-		
-		keys.put(Keys.LEFT, Gdx.input.isKeyPressed(Input.Keys.LEFT)); 
-		keys.put(Keys.RIGHT, Gdx.input.isKeyPressed(Input.Keys.RIGHT));
-		keys.put(Keys.FORWARD, Gdx.input.isKeyPressed(Input.Keys.UP)); 
-		keys.put(Keys.BACK, Gdx.input.isKeyPressed(Input.Keys.DOWN));
-		keys.put(Keys.FIRE, Gdx.input.isKeyPressed(Input.Keys.SPACE));
-		
-		if (keys.get(Keys.LEFT)) {
-			flightX(-0.1f);
-		}
+		if (player.getState().equals(Player.State.EXPLODING) || player.getState().equals(Player.State.DEAD)) {
 
-		if (keys.get(Keys.RIGHT)) {
-			flightX(0.1f);
-		}
-		
-		if ((keys.get(Keys.LEFT) && keys.get(Keys.RIGHT)) || (!keys.get(Keys.LEFT) && !(keys.get(Keys.RIGHT)))) {
-			flightX(0f);
-		}
-
-		if (keys.get(Keys.FIRE)) {
+			stateTime += Gdx.graphics.getDeltaTime();
+			currentFrame = explosion.getKeyFrame(stateTime, false);
+			batch.draw(currentFrame, getX(), getY());
 			
-			if (!player.getState().equals(Player.State.FIRINGGUN)) {
-				player.setState(Player.State.FIRINGGUN);
-				fireGun();
-			}
-
-		}
-		if (!keys.get(Keys.FIRE)) {
-			if (player.getState().equals(Player.State.FIRINGGUN)){
-				player.setState(Player.State.INFLIGTH);
-			}
+		} else {
+			//super.draw(batch, parentAlpha);
 		}
 	}
 
-	private void death() {
-		
-		if (explosion.isAnimationFinished(1.0f)) {
+	public void die() {
+
+		player.setVelocity(new Vector2(0, 0.023f));
+		rotate(-0.2f);
+		scale(-0.003f);		
+
+		if (explosion.isAnimationFinished(stateTime)) {
 			Gdx.app.log(AirStrikeGame.LOG, "PLAYER IS DEAD!!!");
 			player.setState(Player.State.DEAD);
 		}
-
-		//Texture explosionTexture = new Texture(Gdx.files.internal("images/expl1.png"));
-		//TextureRegion tr = new TextureRegion(explosionTexture, 0, 0, 100, 100);			
-		//TextureRegionDrawable trd = new TextureRegionDrawable(tr);
-		//setDrawable(trd);
-		//setWidth(getPrefWidth());
-		//setHeight(getPrefHeight());
 	}	
 	
 	public void fireGun() {
 	
 		Gdx.app.log(AirStrikeGame.LOG, "SHOT!: " + player.getPosition().toString());
 		
-		Vector2 mslPos = new Vector2(player.getPosition());
-		float mslX = player.getBounds().width / 2 - 0.12f;
-		float mslY = player.getBounds().height - 0.3f;
+		Vector2 position = new Vector2(player.getPosition());
 		
-		mslPos.add(new Vector2(mslX, mslY));
-		Missile missile = new Missile(mslPos);
-		TextureRegion missileTextureRegion = new TextureRegion(texture, 76, 2, 4, 10);		
-		MissileImage missileImage = new MissileImage(missile, missileTextureRegion);
-		
-		this.getStage().addActor(missileImage);
+		Missile missile = GameManager.createMissile(position);
+	
+		this.getStage().addActor(missile.getActor());
 	}
 
-	private void processInputAccelerometer() {
-		if (AirStrikeGame.DEBUG_MODE) {
-			//Gdx.app.log(AirStrikeGame.LOG, "accel >" + Gdx.input.getAccelerometerX() + "," + Gdx.input.getAccelerometerY() + "," + Gdx.input.getAccelerometerZ());
-		}
-		
-		float x = 0 - Gdx.input.getAccelerometerX() / 20;
-		flightX(x);
-	}
-	
 	private void flightX(float hSpeed) {
 		
-		if (!player.getState().equals(Player.State.EXPLODING)) {
-			player.setVelocity(new Vector2(hSpeed, player.getVelocity().y));
-		}
+		player.setVelocity(new Vector2(hSpeed, player.getVelocity().y));
 	}
 
 	private void movePlane(float delta) {
@@ -220,76 +183,114 @@ public class PlayerImage extends Image {
 
 		setScaling(Scaling.stretch);
 		setBounds(px, py, player.getBounds().width * ppuX, player.getBounds().height * ppuY);
-		
+
 		body.setTransform(px + 34, py + 48, 0.0f);
 	}
 
-	public class PlayerGestureListener implements GestureListener {
-
-			private PlayerImage player;
-			
-			public void setPlayer(PlayerImage player) {
-				this.player = player;
-			}
-    	
-			@Override
-			public boolean touchDown(float x, float y, int pointer) {
-			
-				Gdx.app.log(AirStrikeGame.LOG, "touchDown");
-				
-				player.fireGun();
-				return true;
-			}
-
-			@Override
-			public boolean tap(float x, float y, int count) {
-			
-				Gdx.app.log(AirStrikeGame.LOG, "tap");
-				return true;
-			}
-
-			@Override
-			public boolean longPress(float x, float y) {
-			
-				Gdx.app.log(AirStrikeGame.LOG, "long press");
-				return true;
-			}
-
-			@Override
-			public boolean fling(float velocityX, float velocityY) {
-			
-				Gdx.app.log(AirStrikeGame.LOG, "fling");
-				return true;
-			}
-
-			@Override
-			public boolean pan(float x, float y, float deltaX, float deltaY) {
-			
-				Gdx.app.log(AirStrikeGame.LOG, "pan");
-				return true;
-			}
-
-			@Override
-			public boolean zoom(float initialDistance, float distance) {
-			
-				Gdx.app.log(AirStrikeGame.LOG, "zoom");
-				return true;
-			}
-
-			@Override
-			public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
-			
-				Gdx.app.log(AirStrikeGame.LOG, "pinch");
-				return true;
-			}
-
-		}
-
 	public void setBody(Body playerBody) {
 		this.body = playerBody;
-		
 	}
 	
+	private void processInputKeys() {
+		
+		keys.put(Keys.LEFT, Gdx.input.isKeyPressed(Input.Keys.LEFT)); 
+		keys.put(Keys.RIGHT, Gdx.input.isKeyPressed(Input.Keys.RIGHT));
+		keys.put(Keys.FORWARD, Gdx.input.isKeyPressed(Input.Keys.UP)); 
+		keys.put(Keys.BACK, Gdx.input.isKeyPressed(Input.Keys.DOWN));
+		keys.put(Keys.FIRE, Gdx.input.isKeyPressed(Input.Keys.SPACE));
+		
+		if (keys.get(Keys.LEFT)) {
+			flightX(-0.1f);
+		}
+	
+		if (keys.get(Keys.RIGHT)) {
+			flightX(0.1f);
+		}
+		
+		if ((keys.get(Keys.LEFT) && keys.get(Keys.RIGHT)) || (!keys.get(Keys.LEFT) && !(keys.get(Keys.RIGHT)))) {
+			flightX(0f);
+		}
+	
+		if (keys.get(Keys.FIRE)) {
+			if (!player.getState().equals(Player.State.FIRINGGUN)) {
+				player.setState(Player.State.FIRINGGUN);
+				fireGun();
+			}
+		}
+
+		if (!keys.get(Keys.FIRE)) {
+			if (player.getState().equals(Player.State.FIRINGGUN)){
+				player.setState(Player.State.INFLIGTH);
+			}
+		}
+	}	
+	
+	private void processInputAccelerometer() {
+		if (AirStrikeGame.DEBUG_MODE) {
+			//Gdx.app.log(AirStrikeGame.LOG, "accel >" + Gdx.input.getAccelerometerX() + "," + Gdx.input.getAccelerometerY() + "," + Gdx.input.getAccelerometerZ());
+		}
+		
+		float x = 0 - Gdx.input.getAccelerometerX() / 20;
+		flightX(x);
+	}	
+	
+	public class PlayerGestureListener implements GestureListener {
+
+		private PlayerImage player;
+		
+		public void setPlayer(PlayerImage player) {
+			this.player = player;
+		}
+	
+		@Override
+		public boolean touchDown(float x, float y, int pointer) {
+		
+			Gdx.app.log(AirStrikeGame.LOG, "touchDown");
+			
+			player.fireGun();
+			return true;
+		}
+
+		@Override
+		public boolean tap(float x, float y, int count) {
+		
+			Gdx.app.log(AirStrikeGame.LOG, "tap");
+			return true;
+		}
+
+		@Override
+		public boolean longPress(float x, float y) {
+		
+			Gdx.app.log(AirStrikeGame.LOG, "long press");
+			return true;
+		}
+
+		@Override
+		public boolean fling(float velocityX, float velocityY) {
+		
+			Gdx.app.log(AirStrikeGame.LOG, "fling");
+			return true;
+		}
+
+		@Override
+		public boolean pan(float x, float y, float deltaX, float deltaY) {
+		
+			Gdx.app.log(AirStrikeGame.LOG, "pan");
+			return true;
+		}
+
+		@Override
+		public boolean zoom(float initialDistance, float distance) {
+		
+			Gdx.app.log(AirStrikeGame.LOG, "zoom");
+			return true;
+		}
+
+		@Override
+		public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
+		
+			Gdx.app.log(AirStrikeGame.LOG, "pinch");
+			return true;
+		}
+	}
 }
-
-

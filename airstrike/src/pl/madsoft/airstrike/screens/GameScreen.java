@@ -18,8 +18,8 @@ import com.badlogic.gdx.utils.Array;
 
 public class GameScreen extends AbstractScreen {
 
-	private static final int BOX_VELOCITY_ITERATIONS = 6;
-	private static final int BOX_POSITION_ITERATIONS = 2;
+	private static final int BOX_VELOCITY_ITERATIONS = 1;
+	private static final int BOX_POSITION_ITERATIONS = 1;
 
 	private Player player;
 
@@ -34,7 +34,7 @@ public class GameScreen extends AbstractScreen {
 	public GameScreen(Game game) {
 		super(game);
 		
-		gameManager = new GameManager();
+		this.gameManager = GameManager.instance();
 		debugRenderer = new Box2DDebugRenderer();
 		
         font = new BitmapFont();

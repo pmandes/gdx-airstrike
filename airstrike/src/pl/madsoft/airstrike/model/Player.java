@@ -62,19 +62,16 @@ public class Player {
 		
 		//Gdx.app.log(AirStrikeGame.LOG, "player position: " + getPosition().toString() + " -> velocity: " + velocity.toString());
 		
-	
 		Vector2 newPosition = new Vector2(position);
 		newPosition.add(velocity);
+
+		if (newPosition.x <= MIN_POS_X) {
+			newPosition.set(MIN_POS_X, newPosition.y);
+		}
 		
-		//if (state != State.EXPLODING) {
-			if (newPosition.x <= MIN_POS_X) {
-				newPosition.set(MIN_POS_X, newPosition.y);
-			}
-			
-			if (newPosition.x >= MAX_POS_X) {
-				newPosition.set(MAX_POS_X, newPosition.y);
-			}
-		//}
+		if (newPosition.x >= MAX_POS_X) {
+			newPosition.set(MAX_POS_X, newPosition.y);
+		}
 			
 		position.set(newPosition);
 	}

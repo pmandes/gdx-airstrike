@@ -12,7 +12,8 @@ public class MainActivity extends AndroidApplication {
         super.onCreate(savedInstanceState);
         
         AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration( );
-        
+
+
         cfg.useAccelerometer = true;
         cfg.useCompass = false;
         cfg.useWakelock = true;
