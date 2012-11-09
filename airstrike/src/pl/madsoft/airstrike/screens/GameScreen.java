@@ -54,7 +54,7 @@ public class GameScreen extends AbstractScreen {
 		levelMapRenderer.render((OrthographicCamera) stage.getCamera());
 		cloudsMapRenderer.render((OrthographicCamera) stage.getCamera());
 
-		debugRenderer.render(GameManager.world, stage.getCamera().combined);
+		//debugRenderer.render(GameManager.world, stage.getCamera().combined);
 		GameManager.world.step(1/60f, BOX_VELOCITY_ITERATIONS, BOX_POSITION_ITERATIONS);
 
 		stage.draw();
@@ -75,18 +75,17 @@ public class GameScreen extends AbstractScreen {
 
 		cloudsMapRenderer = GameManager.createCloudsMapRender();
 
+		// create enemies
+
+		enemies = GameManager.createEnemies();
+		for (Actor enemy : enemies) {
+			stage.addActor(enemy);
+		}
+
 		// create player
 
 		player = GameManager.createPlayer();
 		stage.addActor(player.getActor());
-
-		// create enemies
-
-		enemies = GameManager.createEnemies();
-
-		for (Actor enemy : enemies) {
-			stage.addActor(enemy);
-		}
 	}
 
 	private void moveCamera() {

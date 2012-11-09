@@ -40,6 +40,8 @@ public class PlayerImage extends Image {
 	private boolean isAccelerometer;
 	private Body body;
 	
+	private int dieTime = 150;
+	
 	enum Keys {
         LEFT, RIGHT, FORWARD, BACK, FIRE
     }
@@ -120,6 +122,12 @@ public class PlayerImage extends Image {
 			rotate(-0.2f);
 			scale(-0.003f);
 			
+			if (dieTime <= 0) {
+				this.remove();
+			}
+			
+			dieTime--;
+			
 			// IF (lifes > 0) respawn, restart level ELSE game over  
 		}
 	}
@@ -145,8 +153,8 @@ public class PlayerImage extends Image {
 
 		player.setVelocity(new Vector2(0, 0.023f));
 		rotate(-0.2f);
-		scale(-0.003f);		
-
+		scale(-0.003f);
+	
 		if (explosion.isAnimationFinished(stateTime)) {
 			Gdx.app.log(AirStrikeGame.LOG, "PLAYER IS DEAD!!!");
 			player.setState(Player.State.DEAD);

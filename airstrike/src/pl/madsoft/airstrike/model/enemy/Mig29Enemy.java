@@ -9,9 +9,10 @@ public class Mig29Enemy extends Enemy {
 	public static final float HEIGHT = 1.33f;
 	public static final float WIDTH = 0.907f;
 	public static final float START_V_SPEED = -0.03f;	
+	public static final int HITPOINTS = 3;
 	
 	public Mig29Enemy(Vector2 position) {
-		super(position, START_V_SPEED);
+		super(position, START_V_SPEED, HITPOINTS);
 		
 		type = Enemy.Type.MIG29;
 	}

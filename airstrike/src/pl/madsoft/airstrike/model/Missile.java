@@ -9,13 +9,15 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public class Missile {
 
 	public static final float SPEED = 0.22f;
+	public static final int HITPOWER = 1;
 	
 	Vector2 position = new Vector2();
 	Vector2 velocity = new Vector2(0, SPEED);
 	
-	private float lifeTime = 100;
+	private float lifeTime = 45;
 
 	private Actor actor;
+	private int hitPower = HITPOWER;
 	
 	public float getLifeTime() {
 		return this.lifeTime;
@@ -59,5 +61,9 @@ public class Missile {
 
 	public void setActor(Actor actor) {
 		this.actor = actor;
+	}
+
+	public int getHitPower() {
+		return this.hitPower;
 	}	
 }

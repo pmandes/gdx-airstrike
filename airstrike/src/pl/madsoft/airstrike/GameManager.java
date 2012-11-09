@@ -167,6 +167,23 @@ public class GameManager implements Disposable {
 			}			
 
 			EnemyImage enemyImage = new EnemyImage(enemy, spritesTexture, enemyTextureRegion);
+			
+			float px = enemy.getPosition().x * ppuX;
+			float py = enemy.getPosition().y * ppuY;
+			
+			BodyDef bodyDef = new BodyDef();
+			bodyDef.type = BodyType.DynamicBody;
+			bodyDef.position.set(px, py);
+			
+			Body body = world.createBody(bodyDef);
+			
+			PolygonShape ps = new PolygonShape();
+			ps.setAsBox(34, 50);
+			body.createFixture(ps, 0f);
+
+			body.setUserData(enemy);
+			enemyImage.setBody(body);
+			
 			enemies.add(enemyImage);
 		}
 		
@@ -198,7 +215,7 @@ public class GameManager implements Disposable {
 		body.createFixture(ps, 0f);
 
 		body.setUserData(missile);
-		missileImage.setBody(body);		
+		missileImage.setBody(body);	
 		
 		missile.setActor(missileImage);
 		return missile;

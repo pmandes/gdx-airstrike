@@ -39,6 +39,13 @@ public class MissileImage extends Image {
 
 	private void moveMissile() {
 
+		
+		if (missile.getLifeTime() == 0) {
+			
+			this.body.getWorld().destroyBody(body);
+			this.remove();
+		}
+		
 		missile.updatePosition();
 		
 		this.setX(missile.getPosition().x * ppuX);

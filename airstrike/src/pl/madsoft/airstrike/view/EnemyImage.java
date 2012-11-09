@@ -3,15 +3,20 @@ package pl.madsoft.airstrike.view;
 import pl.madsoft.airstrike.AirStrikeGame;
 import pl.madsoft.airstrike.model.Enemy;
 import pl.madsoft.airstrike.model.Missile;
+import pl.madsoft.airstrike.model.Player;
 import pl.madsoft.airstrike.screens.AbstractScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 
 public class EnemyImage extends Image {
@@ -23,6 +28,19 @@ public class EnemyImage extends Image {
 	private float ppuY;	// pixels per unit on the Y axis
 	
 	private int shootTimer = 0;
+	private Body body;
+	
+	private float stateTimeExpl;
+	private float stateTimeHit;
+	
+	private Animation explosion;
+	private Animation hit;	
+	
+	private TextureRegion currentFrameExpl;
+	private TextureRegion currentFrameHit;
+	
+	private int dieTime = 100;
+	private float rotation = 0;
 	
 	public EnemyImage (Enemy enemy, Texture texture, TextureRegion textureRegion) {
 		
@@ -33,6 +51,29 @@ public class EnemyImage extends Image {
 		
 		ppuX = (float) AbstractScreen.GAME_VIEWPORT_WIDTH / AbstractScreen.CAMERA_WIDTH;
 		ppuY = (float) AbstractScreen.GAME_VIEWPORT_HEIGHT / AbstractScreen.CAMERA_HEIGHT;
+		
+		Texture explosionTexture1 = new Texture(Gdx.files.internal("data/expl1.png"));
+		Texture explosionTexture2 = new Texture(Gdx.files.internal("data/expl2.png"));		
+		
+		Array<TextureRegion> keyFrames1 = new Array<TextureRegion>();		
+		Array<TextureRegion> keyFrames2 = new Array<TextureRegion>();
+		
+		for (int i = 0; i < 12; i++) {
+			TextureRegion tr = new TextureRegion(explosionTexture1, i * 96, 0, 96, 96);
+			keyFrames1.add(tr);
+		}
+
+		for (int i = 0; i < 8; i++) {
+			TextureRegion tr = new TextureRegion(explosionTexture2, i * 48, 0, 48, 48);
+			keyFrames2.add(tr);
+		}		
+
+		explosion = new Animation(0.05f, keyFrames1, Animation.NORMAL);
+		hit = new Animation(0.04f, keyFrames2, Animation.NORMAL);
+		
+		stateTimeExpl = 0f;
+		stateTimeHit = 0f;
+		rotation = MathUtils.random(-0.4f, 0.4f);
 	}
 	
 	@Override
@@ -46,12 +87,65 @@ public class EnemyImage extends Image {
 		}
 		
 		movePlane(delta);
+
+		if (enemy.getState().equals(Enemy.State.HITTED)) {
+			hit();
+		}
+		
+		if (enemy.getState().equals(Enemy.State.EXPLODING)) {
+			die();
+		}
+
+		if (enemy.getState().equals(Enemy.State.DEAD)) {
+			
+			rotate(rotation);
+			scale(-0.004f);
+
+			if (dieTime <= 0) {
+				this.remove();
+			}
+
+			dieTime --;
+		}
+	}
+
+	private void hit() {
+		if (explosion.isAnimationFinished(stateTimeHit)) {
+			stateTimeHit = 0;
+			enemy.setState(Enemy.State.INFLIGTH);
+		}		
+	}
+	
+	private void die() {
+		
+		rotate(rotation);
+		scale(-0.004f);		
+
+		if (explosion.isAnimationFinished(stateTimeExpl)) {
+			Gdx.app.log(AirStrikeGame.LOG, "ENEMY IS DEAD!!!");
+			enemy.setState(Enemy.State.DEAD);
+		}
 	}
 
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
 
 		super.draw(batch, parentAlpha);
+		
+		if (enemy.getState().equals(Enemy.State.EXPLODING) || enemy.getState().equals(Enemy.State.DEAD)) {
+
+			stateTimeExpl += Gdx.graphics.getDeltaTime();
+			currentFrameExpl = explosion.getKeyFrame(stateTimeExpl, false);
+			batch.draw(currentFrameExpl, getX(), getY());
+		}
+
+		if (enemy.getState().equals(Enemy.State.HITTED)) {
+
+			stateTimeHit += Gdx.graphics.getDeltaTime();
+			currentFrameHit = hit.getKeyFrame(stateTimeHit, false);
+			batch.draw(currentFrameHit, getX() + 10, getY() + 35);
+		}
+
 	}
 		
 	public void fireGun() {
@@ -89,6 +183,12 @@ public class EnemyImage extends Image {
 
 		setScaling(Scaling.stretch);
 		setBounds(px, py, enemy.getBounds().width * ppuX, enemy.getBounds().height * ppuY);
+		
+ 		body.setTransform(px + 34, py + 48, 0.0f);
+	}
+
+	public void setBody(Body body) {
+		this.body = body;
 	}
 	
 }

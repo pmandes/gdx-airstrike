@@ -13,7 +13,7 @@ public class MainActivity extends AndroidApplication {
         
         AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration( );
 
-
+        
         cfg.useAccelerometer = true;
         cfg.useCompass = false;
         cfg.useWakelock = true;
