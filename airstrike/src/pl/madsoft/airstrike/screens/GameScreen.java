@@ -2,6 +2,7 @@ package pl.madsoft.airstrike.screens;
 
 import pl.madsoft.airstrike.AirStrikeGame;
 import pl.madsoft.airstrike.GameManager;
+import pl.madsoft.airstrike.GameManager.State;
 import pl.madsoft.airstrike.model.Player;
 
 import com.badlogic.gdx.Game;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
 
 public class GameScreen extends AbstractScreen {
@@ -30,6 +32,7 @@ public class GameScreen extends AbstractScreen {
 	private Box2DDebugRenderer debugRenderer;
 	private GameManager gameManager;
 	private Array<Actor> enemies;
+	private Group lifes;
 	
 	public GameScreen(Game game) {
 		super(game);
@@ -86,11 +89,18 @@ public class GameScreen extends AbstractScreen {
 
 		player = GameManager.createPlayer();
 		stage.addActor(player.getActor());
+		
+		// create player lifes
+		
+		lifes = GameManager.createPlayerLifes();
+		stage.addActor(lifes);
+				
 	}
 
 	private void moveCamera() {
 
 		float cx = 0f, cy = 2f;
+		int levelEnd = 2962;
 
 		if (player.getPosition().x > 4f && stage.getCamera().position.x < 280f) {
 			cx = 2f;
@@ -100,7 +110,8 @@ public class GameScreen extends AbstractScreen {
 			cx = -2f;
 		}
 
-		if (stage.getCamera().position.y > 2962) {
+		if (stage.getCamera().position.y > levelEnd) {
+			GameManager.state = GameManager.State.LEVEL_END;
 			cx = 0;
 			cy = 0;
 			player.setVelocity(new Vector2(0, 0.06f));

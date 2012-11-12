@@ -78,7 +78,6 @@ public class PlayerImage extends Image {
 		gestureListener.setPlayer(this);
 		Gdx.input.setInputProcessor(new GestureDetector(gestureListener));
 		
-		
 		Texture explosionTexture = new Texture(Gdx.files.internal("images/expl1.png"));
 		Array<TextureRegion> keyFrames = new Array<TextureRegion>();		
 		
@@ -156,8 +155,11 @@ public class PlayerImage extends Image {
 		scale(-0.003f);
 	
 		if (explosion.isAnimationFinished(stateTime)) {
-			Gdx.app.log(AirStrikeGame.LOG, "PLAYER IS DEAD!!!");
-			player.setState(Player.State.DEAD);
+			
+			if (!player.getState().equals(Player.State.DEAD)) {
+				Gdx.app.log(AirStrikeGame.LOG, "PLAYER IS DEAD!!!");
+				player.setState(Player.State.DEAD);
+			}
 		}
 	}	
 	

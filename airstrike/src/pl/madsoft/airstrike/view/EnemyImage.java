@@ -16,6 +16,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 
@@ -35,12 +37,15 @@ public class EnemyImage extends Image {
 	
 	private Animation explosion;
 	private Animation hit;	
-	
+
+	public TextureRegion damaged;
 	private TextureRegion currentFrameExpl;
 	private TextureRegion currentFrameHit;
 	
 	private int dieTime = 100;
 	private float rotation = 0;
+	private float hitRndX;
+	private float hitRndY;
 	
 	public EnemyImage (Enemy enemy, Texture texture, TextureRegion textureRegion) {
 		
@@ -51,7 +56,7 @@ public class EnemyImage extends Image {
 		
 		ppuX = (float) AbstractScreen.GAME_VIEWPORT_WIDTH / AbstractScreen.CAMERA_WIDTH;
 		ppuY = (float) AbstractScreen.GAME_VIEWPORT_HEIGHT / AbstractScreen.CAMERA_HEIGHT;
-		
+	
 		Texture explosionTexture1 = new Texture(Gdx.files.internal("data/expl1.png"));
 		Texture explosionTexture2 = new Texture(Gdx.files.internal("data/expl2.png"));		
 		
@@ -74,6 +79,8 @@ public class EnemyImage extends Image {
 		stateTimeExpl = 0f;
 		stateTimeHit = 0f;
 		rotation = MathUtils.random(-0.4f, 0.4f);
+		hitRndX = MathUtils.random(5f, 20f);
+		hitRndY = MathUtils.random(30f, 50f);
 	}
 	
 	@Override
@@ -110,20 +117,26 @@ public class EnemyImage extends Image {
 	}
 
 	private void hit() {
-		if (explosion.isAnimationFinished(stateTimeHit)) {
+
+		if (hit.isAnimationFinished(stateTimeHit)) {
 			stateTimeHit = 0;
 			enemy.setState(Enemy.State.INFLIGTH);
 		}		
 	}
 	
 	private void die() {
-		
+
+		setDrawable(new TextureRegionDrawable(damaged));
+
 		rotate(rotation);
-		scale(-0.004f);		
+		scale(-0.004f);
 
 		if (explosion.isAnimationFinished(stateTimeExpl)) {
 			Gdx.app.log(AirStrikeGame.LOG, "ENEMY IS DEAD!!!");
-			enemy.setState(Enemy.State.DEAD);
+			
+			if (!enemy.getState().equals(Enemy.State.DEAD)) {
+				enemy.setState(Enemy.State.DEAD);
+			}
 		}
 	}
 
@@ -136,14 +149,15 @@ public class EnemyImage extends Image {
 
 			stateTimeExpl += Gdx.graphics.getDeltaTime();
 			currentFrameExpl = explosion.getKeyFrame(stateTimeExpl, false);
-			batch.draw(currentFrameExpl, getX(), getY());
+			batch.draw(currentFrameExpl, getX(), getY() + 30);
+			batch.draw(currentFrameExpl, getX() - 10, getY() + 20);
 		}
 
 		if (enemy.getState().equals(Enemy.State.HITTED)) {
 
 			stateTimeHit += Gdx.graphics.getDeltaTime();
 			currentFrameHit = hit.getKeyFrame(stateTimeHit, false);
-			batch.draw(currentFrameHit, getX() + 10, getY() + 35);
+			batch.draw(currentFrameHit, getX() + hitRndX, getY() + hitRndY);
 		}
 
 	}

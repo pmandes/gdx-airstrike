@@ -33,6 +33,8 @@ public class Player {
 
 	Rectangle bounds = new Rectangle();
 	State      state = State.INFLIGTH;
+	
+	private int lifes = 5; 
     
     public Vector2 getVelocity() {
 		return velocity;
@@ -93,5 +95,13 @@ public class Player {
 
 	public void setActor(Actor actor) {
 		this.actor = actor;
+	}
+
+	public int getLifes() {
+		return lifes;
+	}
+
+	public void setLifes(int lifes) {
+		this.lifes = lifes;
 	}
 }

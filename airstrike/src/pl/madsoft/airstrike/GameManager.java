@@ -9,6 +9,7 @@ import pl.madsoft.airstrike.screens.AbstractScreen;
 import pl.madsoft.airstrike.view.EnemyImage;
 import pl.madsoft.airstrike.view.MissileImage;
 import pl.madsoft.airstrike.view.PlayerImage;
+import pl.madsoft.airstrike.view.PlayerLifesGroup;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -26,6 +27,7 @@ import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
@@ -33,7 +35,14 @@ public class GameManager implements Disposable {
 
 	public static World world;
 	public static Player player;
-	private static Texture spritesTexture;
+	public static Texture spritesTexture;
+	public static Group playerLifes;
+
+	public enum State {
+		PLAY, LEVEL_END, PLAYER_IS_DEAD, GAMEOVER
+	}	
+	
+	public static State state;
 	
 	private static GameManager instance = null;
 	
@@ -47,10 +56,13 @@ public class GameManager implements Disposable {
 
 	public static float ppuX;
 	public static float ppuY;
+
 	
 	public GameManager() {
 		
 		GameContactListener listener = new GameContactListener("hello");
+		
+		state = State.PLAY;
 		
 		world = new World(new Vector2(0, 0), true);
 		world.setContactListener(listener);
@@ -155,18 +167,22 @@ public class GameManager implements Disposable {
 
 		for (Enemy enemy : enemiesArray) {
 			TextureRegion enemyTextureRegion = null;
+			TextureRegion damagedTextureRegion = null;
 			
 			Gdx.app.log(AirStrikeGame.LOG, "Enemy: " + enemy.getType());
 			
 			if (enemy.getType().equals(Enemy.Type.SU27)) {
 				enemyTextureRegion = new TextureRegion(spritesTexture, 0, 128, 67, 100);
+				damagedTextureRegion = new TextureRegion(spritesTexture, 70, 128, 67, 100);
 			}
 			
-			if (enemy.getType().equals(Enemy.Type.MIG29)) {
+			if (enemy.getType().equals(Enemy.Type.MIG29)) {			
 				enemyTextureRegion = new TextureRegion(spritesTexture, 0, 256, 67, 100);
+				damagedTextureRegion = new TextureRegion(spritesTexture, 70, 256, 67, 100);
 			}			
 
 			EnemyImage enemyImage = new EnemyImage(enemy, spritesTexture, enemyTextureRegion);
+			enemyImage.damaged = damagedTextureRegion;
 			
 			float px = enemy.getPosition().x * ppuX;
 			float py = enemy.getPosition().y * ppuY;
@@ -219,6 +235,13 @@ public class GameManager implements Disposable {
 		
 		missile.setActor(missileImage);
 		return missile;
+	}
+	
+	public static Group createPlayerLifes() {
+
+		playerLifes = new PlayerLifesGroup();
+
+		return playerLifes;
 	}
 	
 	@Override
