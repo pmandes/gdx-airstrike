@@ -120,4 +120,9 @@ public class GameScreen extends AbstractScreen {
 		stage.getCamera().translate(cx, cy, 0);
 	}
 	
+	@Override
+	public void dispose() {
+		super.dispose();
+		this.gameManager.dispose();
+	}
 }

@@ -4,7 +4,6 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
-import pl.madsoft.airstrike.AirStrikeGame;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;

@@ -21,8 +21,8 @@ public class AirStrikeGame extends Game {
 		Gdx.app.log(AirStrikeGame.LOG, "Creating game");
 		
 		fpsLogger = new FPSLogger();
-		setScreen(getGameScreen());
-		//setScreen(getSplashScreen());
+		//setScreen(getGameScreen());
+		setScreen(getSplashScreen());
 	}
 
 	@Override
